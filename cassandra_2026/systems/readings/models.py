@@ -2,29 +2,23 @@ import math
 from datetime import date, datetime
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict, computed_field, AwareDatetime
 
 
 class Reading(BaseModel):
-    model_config = {"frozen": True}
+    model_config = ConfigDict(frozen=True)
 
     id: UUID = Field(default_factory=uuid4)
-    city: str
-    created: datetime
-    value: float
-
-    @field_validator("value")
-    @classmethod
-    def value_in_range(cls, v: float) -> float:
-        if not 0.0 <= v <= 1.0:
-            raise ValueError("value must be between 0.0 and 1.0")
-        return v
+    city: str = Field(min_length=1)
+    created: datetime  # AwareDatetime
+    value: float = Field(ge=0.0, le=1.0)
 
     @property
     def day(self) -> date:
         return self.created.date()
 
     @property
+    # @computed_field
     def value_bucket(self) -> int:
         # 10 buckets: 0→[0.0,0.1), 1→[0.1,0.2), …, 9→[0.9,1.0]
         return min(int(math.floor(self.value * 10)), 9)

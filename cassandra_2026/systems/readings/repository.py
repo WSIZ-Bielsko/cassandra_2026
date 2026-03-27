@@ -94,6 +94,11 @@ class ReadingRepository:
         return Reading(id=row.id, city=row.city, created=row.created, value=row.value)
 
     def _insert_batch(self, r: Reading) -> None:
+        # execute all 4 queries (below) or none of them (on error)
+        # "all-or-none delivery"
+        # but:
+        # - no isolation (partial writes visible)
+        #
         batch = BatchStatement(batch_type=BatchType.LOGGED)
         batch.add(self._ps["ins_main"],  (r.id, r.city, r.created, r.value))
         batch.add(self._ps["ins_time"],  (r.day, r.created, r.id, r.city, r.value))
@@ -127,6 +132,9 @@ class ReadingRepository:
 
     def delete(self, reading: Reading) -> None:
         self._delete_batch(reading)
+
+    def count(self) -> int:
+        return self.session.execute("SELECT COUNT(*) FROM sensor_ks.readings").one()[0]
 
     # ── Named searches ────────────────────────────────────────────────────────
 
