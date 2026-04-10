@@ -28,3 +28,4 @@ CREATE TABLE readings_by_value (
     created      timestamp,
     PRIMARY KEY (value_bucket, value, id)
 );
+

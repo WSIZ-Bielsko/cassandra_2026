@@ -12,25 +12,6 @@ files = [
 ]
 
 [[package]]
-name = "async-cassandra"
-version = "0.0.1"
-description = "Async Python wrapper for the Cassandra Python driver"
-optional = false
-python-versions = ">=3.12"
-files = [
-    {file = "async_cassandra-0.0.1-py3-none-any.whl", hash = "sha256:117e646ef07357675ca1b0c3fd39a23c44bba296548a96b5b2aecd77e5f48ca8"},
-    {file = "async_cassandra-0.0.1.tar.gz", hash = "sha256:3a98a1dad4cd140b039b5276455bd0a7b6bb39654db25412d140c0060c7d009b"},
-]
-
-[package.dependencies]
-cassandra-driver = ">=3.29.2"
-
-[package.extras]
-dev = ["black (>=23.0.0)", "isort (>=5.12.0)", "mypy (>=1.0.0)", "pre-commit (>=3.0.0)", "pytest (>=7.0.0)", "pytest-asyncio (>=0.21.0)", "pytest-cov (>=4.0.0)", "pytest-mock (>=3.10.0)", "pytest-timeout (>=2.2.0)", "ruff (>=0.1.0)"]
-docs = ["sphinx (>=6.0.0)", "sphinx-autodoc-typehints (>=1.22.0)", "sphinx-rtd-theme (>=1.2.0)"]
-test = ["fastapi (>=0.100.0)", "httpx (>=0.24.0)", "psutil (>=5.9.0)", "pytest (>=7.0.0)", "pytest-asyncio (>=0.21.0)", "pytest-bdd (>=7.0.0)", "pytest-cov (>=4.0.0)", "pytest-mock (>=3.10.0)", "pytest-timeout (>=2.2.0)", "uvicorn (>=0.23.0)"]
-
-[[package]]
 name = "cassandra-driver"
 version = "3.29.3"
 description = "DataStax Driver for Apache Cassandra"
@@ -343,5 +324,5 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 
 [metadata]
 lock-version = "2.0"
-python-versions = ">=3.12,<3.15"
-content-hash = "d55a2b5ba6dc2f79ae3205f017e0b25564ba9a26a7caea3345b85e4c9d9a1557"
+python-versions = ">=3.11,<3.15"
+content-hash = "6ddfc8f04c93895628ff8f8eb61445a47ff8e745c81093f6f995e70a1c2f6064"
