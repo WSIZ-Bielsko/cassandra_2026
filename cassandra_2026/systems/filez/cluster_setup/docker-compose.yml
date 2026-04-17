@@ -1,0 +1,81 @@
+version: '3.8'
+
+x-cassandra-common: &cassandra-common
+  image: cassandra:5.0
+  networks:
+    - cassandra-cnet
+  deploy:
+    endpoint_mode: dnsrr
+    restart_policy:
+      condition: on-failure
+
+x-cassandra-env: &cassandra-env
+  CASSANDRA_CLUSTER_NAME: "cluster1"
+  CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
+  CASSANDRA_DC: "dc1"
+  CASSANDRA_SEEDS: "cassandra-1"
+
+services:
+  cassandra-1:
+    <<: *cassandra-common
+    ports:
+      - target: 9042
+        published: 9044
+        protocol: tcp
+        mode: host    # <-- This is the critical fix
+    environment:
+      <<: *cassandra-env
+      CASSANDRA_BROADCAST_RPC_ADDRESS: "10.10.1.231"
+    volumes:
+      - cassandra-data-1:/var/lib/cassandra
+    deploy:
+      endpoint_mode: dnsrr
+      placement:
+        constraints:
+          - node.labels.cassandra == node1
+
+  cassandra-2:
+    <<: *cassandra-common
+    environment:
+      <<: *cassandra-env
+      CASSANDRA_BROADCAST_RPC_ADDRESS: "10.10.1.232"
+    ports:
+      - target: 9042
+        published: 9044
+        protocol: tcp
+        mode: host
+    volumes:
+      - cassandra-data-2:/var/lib/cassandra
+    deploy:
+      endpoint_mode: dnsrr
+      placement:
+        constraints:
+          - node.labels.cassandra == node2
+
+  cassandra-3:
+    <<: *cassandra-common
+    environment:
+      <<: *cassandra-env
+      CASSANDRA_BROADCAST_RPC_ADDRESS: "10.10.1.233"
+    ports:
+      - target: 9042
+        published: 9044
+        protocol: tcp
+        mode: host
+    volumes:
+      - cassandra-data-3:/var/lib/cassandra
+    deploy:
+      endpoint_mode: dnsrr
+      placement:
+        constraints:
+          - node.labels.cassandra == node3
+
+networks:
+  cassandra-cnet:
+    driver: overlay
+    attachable: true
+
+volumes:
+  cassandra-data-1:
+  cassandra-data-2:
+  cassandra-data-3:

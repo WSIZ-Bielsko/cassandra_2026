@@ -1,0 +1,1 @@
+# how to install cassandra cluster with docker swarm
