@@ -1,7 +1,7 @@
 def insert_st(session):
     return session.prepare(
         "INSERT INTO files (file_id, author_id, filename, created_at, content) "
-        "VALUES (?, ?, ?, ?, ?)"
+        "VALUES (?, ?, ?, ?, ?) USING TTL 604800;"  # 7 days
     )
 
 def get_by_id_st(session):
@@ -14,3 +14,9 @@ def get_by_author_st(session):
 
 def get_by_time_range_st(session):
     return session.prepare("SELECT * FROM files WHERE created_at >= ? AND created_at <= ?")
+
+def delete_by_author_st(session):
+    return session.prepare("DELETE FROM files WHERE author_id = ?")
+
+def delete_by_id_st(session):
+    return session.prepare("DELETE FROM files WHERE file_id = ?")

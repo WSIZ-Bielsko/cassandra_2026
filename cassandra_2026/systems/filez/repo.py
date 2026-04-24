@@ -12,10 +12,18 @@ class FileRepository:
         self.session = session
 
         # prepare statements
+        # -- C
         self.insert_stmt = insert_st(session)
+        # -- R
         self.get_by_id_stmt = get_by_id_st(session)
         self.get_by_author_stmt = get_by_author_st(session)
         self.get_by_time_range_stmt = get_by_time_range_st(session)
+
+        # -- U
+
+        # -- D
+        self.delete_by_id_stmt = delete_by_id_st(session)
+        # self.delete_by_author_stmt = delete_by_author_st(session)
 
 
 
@@ -42,3 +50,18 @@ class FileRepository:
         logger.info(f'Getting files by author: {author_id}')
         files = await execute_async_awaitable(self.session, self.get_by_author_stmt, (author_id,))
         return [StoredFile(**(file._asdict())) for file in files] if files else []
+
+
+    async def delete_file_by_id(self, file_id: UUID):
+        logger.info(f'Deleting file by id: {file_id}')
+        await execute_async_awaitable(self.session, self.delete_by_id_stmt, (file_id,))
+
+    async def delete_files_by_author(self, author_id: UUID):
+        logger.info(f'Deleting files by author: {author_id}')
+        # todo: transactional ?!
+        for_removel = await self.get_files_by_author(author_id)
+        for file in for_removel:
+            await self.delete_file_by_id(file.file_id)
+
+
+        # await execute_async_awaitable(self.session, self.delete_by_author_stmt, (author_id,))
