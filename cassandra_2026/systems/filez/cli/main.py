@@ -84,12 +84,19 @@ def download(
 @app.command(no_args_is_help=True)
 def get(
     file_id: Annotated[UUID, typer.Argument(help="UUID of the file to inspect.")],
+    with_content: Annotated[
+        bool,
+        typer.Option("--with-content", help="Also fetch file content and show size."),
+    ] = False,
 ) -> None:
     """Print metadata of a stored file without downloading its content."""
     cluster, session = get_cluster_session()
     try:
         repo = FileRepository(session)
-        stored_file = asyncio.run(repo.get_file_by_id(file_id))
+        if with_content:
+            stored_file = asyncio.run(repo.get_file_by_id(file_id))
+        else:
+            stored_file = asyncio.run(repo.get_file_meta_by_id(file_id))
         if stored_file is None:
             typer.echo(f"File not found: {file_id}", err=True)
             raise typer.Exit(code=1)
@@ -97,7 +104,8 @@ def get(
         typer.echo(f"author_id:  {stored_file.author_id}")
         typer.echo(f"filename:   {stored_file.filename}")
         typer.echo(f"created_at: {stored_file.created_at.isoformat()}")
-        typer.echo(f"size:       {len(stored_file.content)} bytes")
+        if stored_file.content is not None:
+            typer.echo(f"size:       {len(stored_file.content)} bytes")
     finally:
         cluster.shutdown()
 
@@ -119,7 +127,6 @@ def list_by_author() -> None:
             typer.echo(f"- {f.filename}")
             typer.echo(f"   file_id:    {f.file_id}")
             typer.echo(f"   created_at: {f.created_at.isoformat()}")
-            typer.echo(f"   size:       {len(f.content)} bytes")
     finally:
         cluster.shutdown()
 

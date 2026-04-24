@@ -45,8 +45,11 @@ class FileRepository:
             "INSERT INTO files (file_id, author_id, filename, created_at, content) VALUES (?, ?, ?, ?, ?)"
         )
         self.get_by_id_stmt = session.prepare("SELECT * FROM files WHERE file_id = ?")
+        self.get_meta_by_id_stmt = session.prepare(
+            "SELECT file_id, author_id, filename, created_at FROM files WHERE file_id = ?"
+        )
         self.get_by_author_stmt = session.prepare(
-            "SELECT * FROM files WHERE author_id = ?"
+            "SELECT file_id, author_id, filename, created_at FROM files WHERE author_id = ?"
         )
 
     @staticmethod
@@ -73,8 +76,21 @@ class FileRepository:
         rows = list(result)
         return self._to_stored_file(rows[0]) if rows else None
 
+    async def get_file_meta_by_id(self, file_id: UUID) -> StoredFile | None:
+        result = await execute_async_awaitable(
+            self.session, self.get_meta_by_id_stmt, (file_id,)
+        )
+        rows = list(result)
+        return self._to_file_meta(rows[0]) if rows else None
+
+    @staticmethod
+    def _to_file_meta(row) -> StoredFile:
+        d = row._asdict()
+        d["content"] = None
+        return StoredFile(**d)
+
     async def get_files_by_author(self, author_id: UUID) -> list[StoredFile]:
         result = await execute_async_awaitable(
             self.session, self.get_by_author_stmt, (author_id,)
         )
-        return [self._to_stored_file(row) for row in result]
+        return [self._to_file_meta(row) for row in result]

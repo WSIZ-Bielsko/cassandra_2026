@@ -7,4 +7,4 @@ class StoredFile(BaseModel):
     author_id: UUID
     filename: str
     created_at: datetime
-    content: bytes
+    content: bytes | None = None
