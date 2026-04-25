@@ -22,6 +22,7 @@ class FileRepository:
         # -- U
 
         # -- D
+        self.get_meta_by_id_stmt = get_meta_by_id_st(session)
         self.delete_by_id_stmt = delete_by_id_st(session)
         # self.delete_by_author_stmt = delete_by_author_st(session)
 
@@ -41,6 +42,12 @@ class FileRepository:
         print(gg.filename)
         print(type(gg))
         return StoredFile(**(gg._asdict())) if file else None
+
+    async def get_file_meta_by_id(self, file_id: UUID) -> StoredFile | None:
+        logger.info(f'Getting file meta by id: {file_id}')
+        result = await execute_async_awaitable(self.session, self.get_meta_by_id_stmt, (file_id,))
+        rows = list(result)
+        return StoredFile(**rows[0]._asdict()) if rows else None
 
     async def get_files_by_author(self, author_id: UUID) -> list[StoredFile]:
         """

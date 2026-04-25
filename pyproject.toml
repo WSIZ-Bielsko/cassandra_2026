@@ -16,7 +16,7 @@ typer = "^0.24.2"
 
 
 [tool.poetry.scripts]
-filez = "cassandra_2026.systems.filez.cli.main:app"
+filez = "cassandra_2026.systems.filez.cli:app"
 
 [build-system]
 requires = ["poetry-core"]
