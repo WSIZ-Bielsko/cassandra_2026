@@ -1,3 +1,4 @@
+import datetime
 import os
 from asyncio import Future, get_event_loop
 from typing import Any
@@ -31,3 +32,6 @@ def execute_async_awaitable(session, query, parameters=None) -> Future[Any]:
 
     cassandra_future.add_callbacks(on_success, on_error)
     return future
+
+def ts():
+    return datetime.datetime.now().timestamp()

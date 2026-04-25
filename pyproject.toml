@@ -12,7 +12,7 @@ loguru = "^0.7.3"
 python-dotenv = "^1.2.2"
 cassandra-driver = "^3.29.3"
 #async-cassandra = "^0.0.1"
-typer = "^0.24.1"
+typer = "^0.24.2"
 
 
 [tool.poetry.scripts]
