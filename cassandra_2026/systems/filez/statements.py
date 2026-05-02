@@ -20,3 +20,8 @@ def delete_by_author_st(session):
 
 def delete_by_id_st(session):
     return session.prepare("DELETE FROM files WHERE file_id = ?")
+
+def get_meta_by_id_st(session):
+    return session.prepare(
+        "SELECT file_id, author_id, filename, created_at FROM files WHERE file_id = ?"
+    )
