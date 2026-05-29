@@ -1,3 +1,4 @@
+import asyncio
 import os
 from asyncio import run
 from datetime import datetime
@@ -44,15 +45,22 @@ async def main():
 
 
     # file = load_file('3_body_problem.txt')
-    file = load_file('binfile.dat')
+    file = load_file('binfile.dat') # 10MB file
+    file.file_id = uuid4()
     st = ts()
-    for _ in range(10):
-        await repo.insert_file(file)
+
+    async_tasks = []
+    N_FILES = 2
+    for _ in range(N_FILES):
+        async_tasks.append(repo.insert_file(file))
         logger.info(f'File saved: {file.filename}')
+    await asyncio.gather(*async_tasks)
     en = ts()
-    logger.info(f'Single file save time: {(en - st)/10:.4f} seconds')  # 30MB/s
+    logger.info(f'Single file save time: {(en - st)/N_FILES:.4f} seconds')  # 30MB/s
     # each cassandra on drive with:
     #   write: IOPS=29.3k, BW=1829MiB/s (1918MB/s)(17.9GiB/10008msec); 0 zone resets
+    # todo: change consistency of writes
+
 
     #
     # zz = await repo.get_file_by_id(file.file_id)

@@ -1,8 +1,13 @@
+from cassandra import ConsistencyLevel
+
+
 def insert_st(session):
-    return session.prepare(
+    stmt = session.prepare(
         "INSERT INTO files (file_id, author_id, filename, created_at, content) "
         "VALUES (?, ?, ?, ?, ?) USING TTL 604800;"  # 7 days
     )
+    stmt.consistency_level = ConsistencyLevel.LOCAL_ONE
+    return stmt
 
 def get_by_id_st(session):
     return session.prepare("SELECT * FROM files WHERE file_id = ?")

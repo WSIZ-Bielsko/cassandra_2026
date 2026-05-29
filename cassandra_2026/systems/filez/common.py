@@ -4,6 +4,7 @@ from asyncio import Future, get_event_loop
 from typing import Any
 
 from cassandra.cluster import Cluster
+from cassandra.policies import HostDistance
 from dotenv import load_dotenv
 
 
@@ -15,6 +16,7 @@ def get_cluster_session():
 
     cluster = Cluster(contact_points=contact_points, port=port)
     session = cluster.connect(keyspace)
+
     return cluster, session
 
 # Helper function to convert Cassandra's ResponseFuture to an asyncio Future
