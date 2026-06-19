@@ -18,16 +18,16 @@ cluster = Cluster(['10.10.1.225'], port=9050)
 session = cluster.connect()
 
 # Execute CQL
-# session.execute("""
-#     CREATE KEYSPACE IF NOT EXISTS filex
-#     WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1}
-#     AND durable_writes = true;
-# """)
-
-
 session.execute("""
-   DROP KEYSPACE IF EXISTS filex;
+    CREATE KEYSPACE IF NOT EXISTS filex
+    WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1}
+    AND durable_writes = true;
 """)
+
+
+# session.execute("""
+#    DROP KEYSPACE IF EXISTS filex;
+# """)
 
 
 

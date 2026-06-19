@@ -1,0 +1,9 @@
+{
+  "name": "test migration 1",
+  "up_script": "CREATE TABLE xx(\n    name text PRIMARY KEY\n);",
+  "down_script": "drop table xx;",
+  "level": 2,
+  "id": "M2",
+  "prev_id": "M1",
+  "next_id": "N/A"
+}

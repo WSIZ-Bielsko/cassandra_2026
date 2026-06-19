@@ -1,0 +1,9 @@
+{
+  "name": "migration 0 ",
+  "up_script": "select * from version;",
+  "down_script": "select * from version;",
+  "level": 0,
+  "id": "START",
+  "prev_id": "NONE",
+  "next_id": "M1"
+}
