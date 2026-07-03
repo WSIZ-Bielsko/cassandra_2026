@@ -1,0 +1,9 @@
+{
+  "name": "first true migration (dummy)",
+  "up_script": "CREATE TABLE IF NOT EXISTS hardware (\n  hardware_id uuid PRIMARY KEY,\n  cpu text,\n  memory_mb int,\n  specs text\n);",
+  "down_script": "DROP TABLE HARDWARE",
+  "level": 3,
+  "id": "M3",
+  "prev_id": "M2",
+  "next_id": "NONE"
+}
