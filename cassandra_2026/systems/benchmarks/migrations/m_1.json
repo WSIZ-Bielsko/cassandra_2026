@@ -1,0 +1,9 @@
+{
+  "name": "launch setup.cql instead of running this migration; it will be considered done",
+  "up_script": "select * from version;",
+  "down_script": "select * from version;",
+  "level": 1,
+  "id": "START",
+  "prev_id": "NONE",
+  "next_id": "M2"
+}

@@ -1,0 +1,9 @@
+{
+  "name": "first true migration (dummy)",
+  "up_script": "select * from version;",
+  "down_script": "select * from version;",
+  "level": 2,
+  "id": "M2",
+  "prev_id": "START",
+  "next_id": "NONE"
+}
